@@ -35,6 +35,7 @@ void Asteroids::Start()
 	// Create a shared pointer for the Asteroids game object - DO NOT REMOVE
 	shared_ptr<Asteroids> thisPtr = shared_ptr<Asteroids>(this);
 
+
 	// Add this class as a listener of the game world
 	mGameWorld->AddListener(thisPtr.get());
 
@@ -58,20 +59,17 @@ void Asteroids::Start()
 	Animation *asteroid1_anim = AnimationManager::GetInstance().CreateAnimationFromFile("asteroid1", 128, 8192, 128, 128, "asteroid1_fs.png");
 	Animation *spaceship_anim = AnimationManager::GetInstance().CreateAnimationFromFile("spaceship", 128, 128, 128, 128, "spaceship_fs.png");
 
-	// Create a spaceship and add it to the world
-	mGameWorld->AddObject(CreateSpaceship());
-	// Create some asteroids and add them to the world
-	CreateAsteroids(10);
-
 	//Create the GUI
 	CreateGUI();
+	mLivesLabel->SetVisible(false);
+	mScoreLabel->SetVisible(false);
 
 	// Add a player (watcher) to the game world
 	mGameWorld->AddListener(&mPlayer);
 
 	// Add this class as a listener of the player
 	mPlayer.AddListener(thisPtr);
-
+	
 	// Start the game
 	GameSession::Start();
 }
@@ -92,6 +90,12 @@ void Asteroids::OnKeyPressed(uchar key, int x, int y)
 	case ' ':
 		mSpaceship->Shoot();
 		break;
+	case 13: // Enter
+		mStartScreenLabel->SetVisible(false);
+		mLivesLabel->SetVisible(true);
+		mScoreLabel->SetVisible(true);
+		mGameWorld->AddObject(CreateSpaceship());
+		CreateAsteroids(10);
 	default:
 		break;
 	}
@@ -109,6 +113,8 @@ void Asteroids::OnSpecialKeyPressed(int key, int x, int y)
 	case GLUT_KEY_LEFT: mSpaceship->Rotate(90); break;
 	// If right arrow key is pressed start rotating clockwise
 	case GLUT_KEY_RIGHT: mSpaceship->Rotate(-90); break;
+	// If up arrow key is pressed start applying backward thrust
+	case GLUT_KEY_DOWN: mSpaceship->Thrust(-10); break;
 	// Default case - do nothing
 	default: break;
 	}
@@ -124,6 +130,8 @@ void Asteroids::OnSpecialKeyReleased(int key, int x, int y)
 	case GLUT_KEY_LEFT: mSpaceship->Rotate(0); break;
 	// If right arrow key is released stop rotating
 	case GLUT_KEY_RIGHT: mSpaceship->Rotate(0); break;
+	// If down arrow key is released stop applying backward thrust
+	case GLUT_KEY_DOWN: mSpaceship->Thrust(0); break;
 	// Default case - do nothing
 	default: break;
 	} 
@@ -222,6 +230,13 @@ void Asteroids::CreateGUI()
 	shared_ptr<GUIComponent> score_component
 		= static_pointer_cast<GUIComponent>(mScoreLabel);
 	mGameDisplay->GetContainer()->AddComponent(score_component, GLVector2f(0.0f, 1.0f));
+
+	mStartScreenLabel = shared_ptr<GUILabel>(new GUILabel("PRESS ENTER TO START"));
+	mStartScreenLabel->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);
+	mStartScreenLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_MIDDLE);
+	shared_ptr<GUIComponent> start_screen_component
+		= static_pointer_cast<GUIComponent>(mStartScreenLabel);
+	mGameDisplay->GetContainer()->AddComponent(start_screen_component, GLVector2f(0.5f, 0.5f));
 
 	// Create a new GUILabel and wrap it up in a shared_ptr
 	mLivesLabel = make_shared<GUILabel>("Lives: 3");
