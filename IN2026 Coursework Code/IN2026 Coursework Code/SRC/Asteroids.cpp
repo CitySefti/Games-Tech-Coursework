@@ -35,7 +35,6 @@ void Asteroids::Start()
 	// Create a shared pointer for the Asteroids game object - DO NOT REMOVE
 	shared_ptr<Asteroids> thisPtr = shared_ptr<Asteroids>(this);
 
-
 	// Add this class as a listener of the game world
 	mGameWorld->AddListener(thisPtr.get());
 
@@ -61,8 +60,6 @@ void Asteroids::Start()
 
 	//Create the GUI
 	CreateGUI();
-	mLivesLabel->SetVisible(false);
-	mScoreLabel->SetVisible(false);
 
 	// Add a player (watcher) to the game world
 	mGameWorld->AddListener(&mPlayer);
@@ -91,6 +88,7 @@ void Asteroids::OnKeyPressed(uchar key, int x, int y)
 		mSpaceship->Shoot();
 		break;
 	case 13: // Enter
+		mStartScreenTitle->SetVisible(false);
 		mStartScreenLabel->SetVisible(false);
 		mLivesLabel->SetVisible(true);
 		mScoreLabel->SetVisible(true);
@@ -226,22 +224,33 @@ void Asteroids::CreateGUI()
 	mScoreLabel = make_shared<GUILabel>("Score: 0");
 	// Set the vertical alignment of the label to GUI_VALIGN_TOP
 	mScoreLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_TOP);
+	// Set the visibility of the label to false (hidden)
+	mScoreLabel->SetVisible(false);
 	// Add the GUILabel to the GUIComponent  
 	shared_ptr<GUIComponent> score_component
 		= static_pointer_cast<GUIComponent>(mScoreLabel);
 	mGameDisplay->GetContainer()->AddComponent(score_component, GLVector2f(0.0f, 1.0f));
+
+	mStartScreenTitle = shared_ptr<GUILabel>(new GUILabel("ASTEROIDS"));
+	mStartScreenTitle->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);
+	mStartScreenTitle->SetVerticalAlignment(GUIComponent::GUI_VALIGN_MIDDLE);
+	shared_ptr<GUIComponent> title_component
+		= static_pointer_cast<GUIComponent>(mStartScreenTitle);
+	mGameDisplay->GetContainer()->AddComponent(title_component, GLVector2f(0.5f, 0.75f));
 
 	mStartScreenLabel = shared_ptr<GUILabel>(new GUILabel("PRESS ENTER TO START"));
 	mStartScreenLabel->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);
 	mStartScreenLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_MIDDLE);
 	shared_ptr<GUIComponent> start_screen_component
 		= static_pointer_cast<GUIComponent>(mStartScreenLabel);
-	mGameDisplay->GetContainer()->AddComponent(start_screen_component, GLVector2f(0.5f, 0.5f));
+	mGameDisplay->GetContainer()->AddComponent(start_screen_component, GLVector2f(0.5f, 0.25f));
 
 	// Create a new GUILabel and wrap it up in a shared_ptr
 	mLivesLabel = make_shared<GUILabel>("Lives: 3");
 	// Set the vertical alignment of the label to GUI_VALIGN_BOTTOM
 	mLivesLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_BOTTOM);
+	// Set the visibility of the label to false (hidden)
+	mLivesLabel->SetVisible(false);
 	// Add the GUILabel to the GUIComponent  
 	shared_ptr<GUIComponent> lives_component = static_pointer_cast<GUIComponent>(mLivesLabel);
 	mGameDisplay->GetContainer()->AddComponent(lives_component, GLVector2f(0.0f, 0.0f));
@@ -258,7 +267,6 @@ void Asteroids::CreateGUI()
 	shared_ptr<GUIComponent> game_over_component
 		= static_pointer_cast<GUIComponent>(mGameOverLabel);
 	mGameDisplay->GetContainer()->AddComponent(game_over_component, GLVector2f(0.5f, 0.5f));
-
 }
 
 void Asteroids::OnScoreChanged(int score)
