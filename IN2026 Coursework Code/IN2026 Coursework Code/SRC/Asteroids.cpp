@@ -221,7 +221,7 @@ void Asteroids::CreateGUI()
 	// Add a (transparent) border around the edge of the game display
 	mGameDisplay->GetContainer()->SetBorder(GLVector2i(10, 10));
 	// Create a new GUILabel and wrap it up in a shared_ptr
-	mScoreLabel = make_shared<GUILabel>("Score: 0");
+	mScoreLabel = make_shared<GUILabel>("SCORE: 0");
 	// Set the vertical alignment of the label to GUI_VALIGN_TOP
 	mScoreLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_TOP);
 	// Set the visibility of the label to false (hidden)
@@ -246,7 +246,7 @@ void Asteroids::CreateGUI()
 	mGameDisplay->GetContainer()->AddComponent(start_screen_component, GLVector2f(0.5f, 0.25f));
 
 	// Create a new GUILabel and wrap it up in a shared_ptr
-	mLivesLabel = make_shared<GUILabel>("Lives: 3");
+	mLivesLabel = make_shared<GUILabel>("LIVES: 3");
 	// Set the vertical alignment of the label to GUI_VALIGN_BOTTOM
 	mLivesLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_BOTTOM);
 	// Set the visibility of the label to false (hidden)
@@ -273,7 +273,7 @@ void Asteroids::OnScoreChanged(int score)
 {
 	// Format the score message using an string-based stream
 	std::ostringstream msg_stream;
-	msg_stream << "Score: " << score;
+	msg_stream << "SCORE: " << score;
 	// Get the score message as a string
 	std::string score_msg = msg_stream.str();
 	mScoreLabel->SetText(score_msg);
@@ -288,7 +288,7 @@ void Asteroids::OnPlayerKilled(int lives_left)
 
 	// Format the lives left message using an string-based stream
 	std::ostringstream msg_stream;
-	msg_stream << "Lives: " << lives_left;
+	msg_stream << "LIVES: " << lives_left;
 	// Get the lives left message as a string
 	std::string lives_msg = msg_stream.str();
 	mLivesLabel->SetText(lives_msg);
