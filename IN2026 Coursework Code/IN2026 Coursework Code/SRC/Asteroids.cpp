@@ -11,6 +11,7 @@
 #include "BoundingSphere.h"
 #include "GUILabel.h"
 #include "Explosion.h"
+#include "LifeUp.h"
 
 // PUBLIC INSTANCE CONSTRUCTORS ///////////////////////////////////////////////
 
@@ -66,6 +67,8 @@ void Asteroids::Start()
 
 	// Add this class as a listener of the player
 	mPlayer.AddListener(thisPtr);
+
+	CreateLifeUp(1);
 	
 	// Start the game
 	GameSession::Start();
@@ -140,17 +143,22 @@ void Asteroids::OnSpecialKeyReleased(int key, int x, int y)
 
 void Asteroids::OnObjectRemoved(GameWorld* world, shared_ptr<GameObject> object)
 {
+	shared_ptr<GameObject> explosion = CreateExplosion();
+	explosion->SetPosition(object->GetPosition());
+	explosion->SetRotation(object->GetRotation());
+
 	if (object->GetType() == GameObjectType("Asteroid"))
 	{
-		shared_ptr<GameObject> explosion = CreateExplosion();
-		explosion->SetPosition(object->GetPosition());
-		explosion->SetRotation(object->GetRotation());
 		mGameWorld->AddObject(explosion);
 		mAsteroidCount--;
 		if (mAsteroidCount <= 0) 
 		{ 
 			SetTimer(500, START_NEXT_LEVEL); 
 		}
+	}
+	if (object->GetType() == GameObjectType("LifeUp"))
+	{
+		mGameWorld->AddObject(explosion);
 	}
 }
 
@@ -213,6 +221,15 @@ void Asteroids::CreateAsteroids(const uint num_asteroids)
 		asteroid->SetSprite(asteroid_sprite);
 		asteroid->SetScale(0.2f);
 		mGameWorld->AddObject(asteroid);
+	}
+}
+
+void Asteroids::CreateLifeUp(const uint num_LifeUp)
+{
+	for (uint i = 0; i < num_LifeUp; i++) {
+		shared_ptr<GameObject> lifeup = make_shared<LifeUp>();
+		lifeup->SetBoundingShape(make_shared<BoundingSphere>(lifeup->GetThisPtr(), 5.0f));
+		mGameWorld->AddObject(lifeup);
 	}
 }
 
@@ -301,6 +318,15 @@ void Asteroids::OnPlayerKilled(int lives_left)
 	{
 		SetTimer(500, SHOW_GAME_OVER);
 	}
+}
+
+void Asteroids::AddLives(int lives_left) 
+{
+	std::ostringstream msg_stream;
+	msg_stream << "LIVES: " << lives_left;
+	std::string lives_msg = msg_stream.str();
+	mLivesLabel->SetText(lives_msg);
+	lives_left += 1;
 }
 
 shared_ptr<GameObject> Asteroids::CreateExplosion()

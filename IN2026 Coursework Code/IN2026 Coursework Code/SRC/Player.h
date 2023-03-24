@@ -24,6 +24,10 @@ public:
 			mLives -= 1;
 			FirePlayerKilled();
 		}
+		if (object->GetType() == GameObjectType("LifeUp")) {
+			mLives += 1;
+			LifeAdded();
+		}
 	}
 
 	void AddListener(shared_ptr<IPlayerListener> listener)
@@ -37,6 +41,15 @@ public:
 		for (PlayerListenerList::iterator lit = mListeners.begin();
 			lit != mListeners.end(); ++lit) {
 			(*lit)->OnPlayerKilled(mLives);
+		}
+	}
+
+	void LifeAdded()
+	{
+		// Send message to all listeners
+		for (PlayerListenerList::iterator lit = mListeners.begin();
+			lit != mListeners.end(); ++lit) {
+			(*lit)->AddLives(mLives);
 		}
 	}
 

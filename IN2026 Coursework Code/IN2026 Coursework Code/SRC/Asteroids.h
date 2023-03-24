@@ -24,6 +24,8 @@ public:
 	virtual void Start(void);
 	virtual void Stop(void);
 
+	void AddLives(int lives_left);
+
 	// Declaration of IKeyboardListener interface ////////////////////////////////
 
 	void OnKeyPressed(uchar key, int x, int y);
@@ -63,6 +65,7 @@ private:
 	shared_ptr<GameObject> CreateSpaceship();
 	void CreateGUI();
 	void CreateAsteroids(const uint num_asteroids);
+	void CreateLifeUp(const uint num_LifeUp);
 	shared_ptr<GameObject> CreateExplosion();
 	
 	const static uint SHOW_GAME_OVER = 0;
