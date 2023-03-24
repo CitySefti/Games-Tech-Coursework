@@ -175,8 +175,13 @@ void Asteroids::OnTimer(int value)
 	if (value == START_NEXT_LEVEL)
 	{
 		mLevel++;
+
 		int num_asteroids = 10 + 2 * mLevel;
 		CreateAsteroids(num_asteroids);
+
+		if (mLevel % 3 == 0) {
+			CreateLifeUp(1);
+		}
 	}
 
 	if (value == SHOW_GAME_OVER)
@@ -227,8 +232,15 @@ void Asteroids::CreateAsteroids(const uint num_asteroids)
 void Asteroids::CreateLifeUp(const uint num_LifeUp)
 {
 	for (uint i = 0; i < num_LifeUp; i++) {
+
+		//Animation *anim_ptr = AnimationManager::GetInstance().GetAnimationByName("lifeup");
+		//shared_ptr<Sprite> lifeup_sprite = make_shared<Sprite>(anim_ptr->GetWidth(), anim_ptr->GetHeight(), anim_ptr);
+		//lifeup_sprite->SetLoopAnimation(true);
+
 		shared_ptr<GameObject> lifeup = make_shared<LifeUp>();
-		lifeup->SetBoundingShape(make_shared<BoundingSphere>(lifeup->GetThisPtr(), 5.0f));
+		lifeup->SetBoundingShape(make_shared<BoundingSphere>(lifeup->GetThisPtr(), 2.0f));
+		//lifeup->SetSprite(lifeup_sprite);
+		//lifeup->SetScale(0.2f);
 		mGameWorld->AddObject(lifeup);
 	}
 }

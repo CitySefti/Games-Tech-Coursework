@@ -18,6 +18,7 @@ LifeUp::~LifeUp(void)
 {
 }
 
+
 void LifeUp::Render(void) 
 {
 	glDisable(GL_LIGHTING);
