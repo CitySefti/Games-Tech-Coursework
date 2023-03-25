@@ -60,12 +60,14 @@ private:
 
 	uint mLevel;
 	uint mAsteroidCount;
+	uint mEnemyCount;
 
 	void ResetSpaceship();
 	shared_ptr<GameObject> CreateSpaceship();
 	void CreateGUI();
 	void CreateAsteroids(const uint num_asteroids);
 	void CreateLifeUp(const uint num_LifeUp);
+	void CreateAlienship(const uint num_Alienship);
 	shared_ptr<GameObject> CreateExplosion();
 	
 	const static uint SHOW_GAME_OVER = 0;

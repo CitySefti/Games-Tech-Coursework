@@ -23,6 +23,11 @@ public:
  			mScore += 10;
 			FireScoreChanged();
 		}
+		if (object->GetType() == GameObjectType("Alienship")) {
+			mScore += 100;
+			FireScoreChanged();
+		}
+
 	}
 
 	void AddListener(shared_ptr<IScoreListener> listener)

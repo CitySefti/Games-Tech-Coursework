@@ -12,6 +12,7 @@
 #include "GUILabel.h"
 #include "Explosion.h"
 #include "LifeUp.h"
+#include "Alienship.h"
 
 // PUBLIC INSTANCE CONSTRUCTORS ///////////////////////////////////////////////
 
@@ -21,6 +22,7 @@ Asteroids::Asteroids(int argc, char *argv[])
 {
 	mLevel = 0;
 	mAsteroidCount = 0;
+	mEnemyCount = 0;
 }
 
 /** Destructor. */
@@ -68,7 +70,8 @@ void Asteroids::Start()
 	// Add this class as a listener of the player
 	mPlayer.AddListener(thisPtr);
 
-	CreateLifeUp(1);
+	//CreateLifeUp(1);
+	//CreateAlienship(1);
 	
 	// Start the game
 	GameSession::Start();
@@ -151,14 +154,21 @@ void Asteroids::OnObjectRemoved(GameWorld* world, shared_ptr<GameObject> object)
 	{
 		mGameWorld->AddObject(explosion);
 		mAsteroidCount--;
-		if (mAsteroidCount <= 0) 
-		{ 
-			SetTimer(500, START_NEXT_LEVEL); 
+		if (mEnemyCount <= 0 && mAsteroidCount <= 0) {
+			SetTimer(500, START_NEXT_LEVEL);
 		}
 	}
 	if (object->GetType() == GameObjectType("LifeUp"))
 	{
 		mGameWorld->AddObject(explosion);
+	}
+	if (object->GetType() == GameObjectType("Alienship"))
+	{
+		mGameWorld->AddObject(explosion);
+		mEnemyCount--;
+		if (mEnemyCount <= 0 && mAsteroidCount <= 0) {
+			SetTimer(500, START_NEXT_LEVEL);
+		}
 	}
 }
 
@@ -179,8 +189,13 @@ void Asteroids::OnTimer(int value)
 		int num_asteroids = 10 + 2 * mLevel;
 		CreateAsteroids(num_asteroids);
 
-		if (mLevel % 3 == 0) {
+		if (mLevel % 2 == 0) {
 			CreateLifeUp(1);
+		}
+
+		if (mLevel % 3 == 0) {
+			int num_Alienship = mLevel / 3;
+			CreateAlienship(num_Alienship);
 		}
 	}
 
@@ -238,10 +253,26 @@ void Asteroids::CreateLifeUp(const uint num_LifeUp)
 		//lifeup_sprite->SetLoopAnimation(true);
 
 		shared_ptr<GameObject> lifeup = make_shared<LifeUp>();
-		lifeup->SetBoundingShape(make_shared<BoundingSphere>(lifeup->GetThisPtr(), 2.0f));
+		lifeup->SetBoundingShape(make_shared<BoundingSphere>(lifeup->GetThisPtr(), 1.0f));
 		//lifeup->SetSprite(lifeup_sprite);
 		//lifeup->SetScale(0.2f);
 		mGameWorld->AddObject(lifeup);
+	}
+}
+
+void Asteroids::CreateAlienship(const uint num_Alienship)
+{
+	mEnemyCount = num_Alienship;
+	for (uint i = 0; i < num_Alienship; i++) {
+		//Animation *anim_ptr = AnimationManager::GetInstance().GetAnimationByName("Alienship");
+		//shared_ptr<Sprite> alienship_sprite = make_shared<Sprite>(anim_ptr->GetWidth(), anim_ptr->GetHeight(), anim_ptr);
+		//alienship_sprite->SetLoopAnimation(true);
+
+		shared_ptr<GameObject> alienship = make_shared<Alienship>();
+		alienship->SetBoundingShape(make_shared<BoundingSphere>(alienship->GetThisPtr(), 4.0f));
+		//alienship->SetSprite(lifeup_sprite);
+		//alienship->SetScale(0.2f);
+		mGameWorld->AddObject(alienship);
 	}
 }
 
@@ -322,7 +353,7 @@ void Asteroids::OnPlayerKilled(int lives_left)
 	std::string lives_msg = msg_stream.str();
 	mLivesLabel->SetText(lives_msg);
 
-	if (lives_left > 0) 
+	if (lives_left >= 0) 
 	{ 
 		SetTimer(1000, CREATE_NEW_PLAYER); 
 	}
