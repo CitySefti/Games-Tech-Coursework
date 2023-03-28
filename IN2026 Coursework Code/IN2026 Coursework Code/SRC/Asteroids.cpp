@@ -12,6 +12,7 @@
 #include "GUILabel.h"
 #include "Explosion.h"
 #include "LifeUp.h"
+#include "BulletLifeUp.h"
 #include "Alienship.h"
 
 // PUBLIC INSTANCE CONSTRUCTORS ///////////////////////////////////////////////
@@ -71,6 +72,7 @@ void Asteroids::Start()
 	mPlayer.AddListener(thisPtr);
 
 	//CreateLifeUp(1);
+	//CreateBulletLife(1);
 	//CreateAlienship(1);
 	
 	// Start the game
@@ -162,6 +164,11 @@ void Asteroids::OnObjectRemoved(GameWorld* world, shared_ptr<GameObject> object)
 	{
 		mGameWorld->AddObject(explosion);
 	}
+	if (object->GetType() == GameObjectType("BulletLifeUp"))
+	{
+		mGameWorld->AddObject(explosion);
+		mSpaceship->AddBulletLife(500); // add 0.5 seconds, change to 1000 to make difference more noticable when testing
+	}
 	if (object->GetType() == GameObjectType("Alienship"))
 	{
 		mGameWorld->AddObject(explosion);
@@ -196,6 +203,12 @@ void Asteroids::OnTimer(int value)
 		if (mLevel % 3 == 0) {
 			int num_Alienship = mLevel / 3;
 			CreateAlienship(num_Alienship);
+		}
+
+		int roll = rand() % 101; // Random integer between 0 and 100
+
+		if (roll >= 80) {
+			CreateBulletLife(1);
 		}
 	}
 
@@ -260,17 +273,31 @@ void Asteroids::CreateLifeUp(const uint num_LifeUp)
 	}
 }
 
+void Asteroids::CreateBulletLife(const uint num_BulletLifeUp)
+{
+	//Animation *anim_ptr = AnimationManager::GetInstance().GetAnimationByName("bulletlife");
+	//shared_ptr<Sprite> bulletlife_sprite = make_shared<Sprite>(anim_ptr->GetWidth(), anim_ptr->GetHeight(), anim_ptr);
+	//bulletlife_sprite->SetLoopAnimation(true);
+
+	shared_ptr<GameObject> bulletlife = make_shared<BulletLifeUp>();
+	bulletlife->SetBoundingShape(make_shared<BoundingSphere>(bulletlife->GetThisPtr(), 1.0f));
+	//bulletlife_sprite->SetSprite(lifeup_sprite);
+	//bulletlife_sprite->SetScale(0.2f);
+	mGameWorld->AddObject(bulletlife);
+}
+
 void Asteroids::CreateAlienship(const uint num_Alienship)
 {
 	mEnemyCount = num_Alienship;
 	for (uint i = 0; i < num_Alienship; i++) {
-		//Animation *anim_ptr = AnimationManager::GetInstance().GetAnimationByName("Alienship");
+
+		//Animation *anim_ptr = AnimationManager::GetInstance().GetAnimationByName("alienship");
 		//shared_ptr<Sprite> alienship_sprite = make_shared<Sprite>(anim_ptr->GetWidth(), anim_ptr->GetHeight(), anim_ptr);
 		//alienship_sprite->SetLoopAnimation(true);
 
 		shared_ptr<GameObject> alienship = make_shared<Alienship>();
 		alienship->SetBoundingShape(make_shared<BoundingSphere>(alienship->GetThisPtr(), 4.0f));
-		//alienship->SetSprite(lifeup_sprite);
+		//alienship->SetSprite(alienship_sprite);
 		//alienship->SetScale(0.2f);
 		mGameWorld->AddObject(alienship);
 	}
