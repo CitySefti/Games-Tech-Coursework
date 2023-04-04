@@ -17,6 +17,7 @@ Alienship::~Alienship(void)
 {
 }
 
+/*
 void Alienship::Render(void)
 {
 	glDisable(GL_LIGHTING);
@@ -33,7 +34,7 @@ void Alienship::Render(void)
 	glEnd();
 	glEnable(GL_LIGHTING);
 }
-
+*/
 bool Alienship::CollisionTest(shared_ptr<GameObject> o)
 {
 	if (o->GetType() != GameObjectType("Bullet") && o->GetType() != GameObjectType("Spaceship")) return false;

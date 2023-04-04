@@ -18,7 +18,7 @@ LifeUp::~LifeUp(void)
 {
 }
 
-
+/*
 void LifeUp::Render(void) 
 {
 	glDisable(GL_LIGHTING);
@@ -35,6 +35,7 @@ void LifeUp::Render(void)
 	glEnd();
 	glEnable(GL_LIGHTING);
 }
+*/
 
 bool LifeUp::CollisionTest(shared_ptr<GameObject> o)
 {

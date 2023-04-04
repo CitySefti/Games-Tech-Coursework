@@ -18,7 +18,7 @@ BulletLifeUp::~BulletLifeUp(void)
 {
 }
 
-
+/*
 void BulletLifeUp::Render(void)
 {
 	glDisable(GL_LIGHTING);
@@ -35,6 +35,7 @@ void BulletLifeUp::Render(void)
 	glEnd();
 	glEnable(GL_LIGHTING);
 }
+*/
 
 bool BulletLifeUp::CollisionTest(shared_ptr<GameObject> o)
 {

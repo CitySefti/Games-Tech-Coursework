@@ -2,13 +2,13 @@
   Asteroids.cpp
 Alienship.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/SAFESEH' specification
   Asteroids.vcxproj -> C:\Users\ShadE\OneDrive\Documents\Year 3 Term 2\Uni - Games Tech\IN2026 Coursework Code\IN2026 Coursework Code\bin\Asteroids.exe
-  ..\..\assets\alienship_fs.png
+  ..\..\assets\alienship.png
   ..\..\assets\asteroid.shape
   ..\..\assets\asteroid1_fs.png
   ..\..\assets\bullet.shape
-  ..\..\assets\bulletlife_fs.png
+  ..\..\assets\bulletlife.png
   ..\..\assets\explosion_fs.png
-  ..\..\assets\lifeup_fs.png
+  ..\..\assets\lifeup.png
   ..\..\assets\spaceship.shape
   ..\..\assets\spaceship_fs.png
   ..\..\assets\thruster.shape

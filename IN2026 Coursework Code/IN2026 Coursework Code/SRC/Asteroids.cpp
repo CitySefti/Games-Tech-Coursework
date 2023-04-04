@@ -62,6 +62,10 @@ void Asteroids::Start()
 	Animation *asteroid1_anim = AnimationManager::GetInstance().CreateAnimationFromFile("asteroid1", 128, 8192, 128, 128, "asteroid1_fs.png");
 	Animation *spaceship_anim = AnimationManager::GetInstance().CreateAnimationFromFile("spaceship", 128, 128, 128, 128, "spaceship_fs.png");
 
+	Animation* lifeup_anim = AnimationManager::GetInstance().CreateAnimationFromFile("lifeup", 128, 128, 128, 128, "lifeup.png");
+	Animation* bulletlife_anim = AnimationManager::GetInstance().CreateAnimationFromFile("bulletlife", 128, 128, 128, 128, "bulletlife.png");
+	Animation* alienship_anim = AnimationManager::GetInstance().CreateAnimationFromFile("alienship", 128, 128, 128, 128, "alienship.png");
+
 	//Create the GUI
 	CreateGUI();
 
@@ -71,9 +75,9 @@ void Asteroids::Start()
 	// Add this class as a listener of the player
 	mPlayer.AddListener(thisPtr);
 
-	//CreateLifeUp(1);
-	//CreateBulletLife(1);
-	//CreateAlienship(1);
+	CreateLifeUp(1);
+	CreateBulletLife(1);
+	CreateAlienship(1);
 	
 	// Start the game
 	GameSession::Start();
@@ -261,28 +265,32 @@ void Asteroids::CreateLifeUp(const uint num_LifeUp)
 {
 	for (uint i = 0; i < num_LifeUp; i++) {
 
-		//Animation *anim_ptr = AnimationManager::GetInstance().GetAnimationByName("lifeup");
-		//shared_ptr<Sprite> lifeup_sprite = make_shared<Sprite>(anim_ptr->GetWidth(), anim_ptr->GetHeight(), anim_ptr);
-		//lifeup_sprite->SetLoopAnimation(true);
+		Animation *anim_ptr = AnimationManager::GetInstance().GetAnimationByName("lifeup");
+		shared_ptr<Sprite> lifeup_sprite = make_shared<Sprite>(anim_ptr->GetWidth(), anim_ptr->GetHeight(), anim_ptr);
+		lifeup_sprite->SetLoopAnimation(true);
 
 		shared_ptr<GameObject> lifeup = make_shared<LifeUp>();
 		lifeup->SetBoundingShape(make_shared<BoundingSphere>(lifeup->GetThisPtr(), 1.0f));
-		//lifeup->SetSprite(lifeup_sprite);
-		//lifeup->SetScale(0.2f);
+		lifeup->SetSprite(lifeup_sprite);
+		lifeup->SetScale(0.1f);
+		//lifeup->SetRotation(180);
+		lifeup->SetAngle(180);
 		mGameWorld->AddObject(lifeup);
 	}
 }
 
 void Asteroids::CreateBulletLife(const uint num_BulletLifeUp)
 {
-	//Animation *anim_ptr = AnimationManager::GetInstance().GetAnimationByName("bulletlife");
-	//shared_ptr<Sprite> bulletlife_sprite = make_shared<Sprite>(anim_ptr->GetWidth(), anim_ptr->GetHeight(), anim_ptr);
-	//bulletlife_sprite->SetLoopAnimation(true);
+	Animation *anim_ptr = AnimationManager::GetInstance().GetAnimationByName("bulletlife");
+	shared_ptr<Sprite> bulletlife_sprite = make_shared<Sprite>(anim_ptr->GetWidth(), anim_ptr->GetHeight(), anim_ptr);
+	bulletlife_sprite->SetLoopAnimation(true);
 
 	shared_ptr<GameObject> bulletlife = make_shared<BulletLifeUp>();
 	bulletlife->SetBoundingShape(make_shared<BoundingSphere>(bulletlife->GetThisPtr(), 1.0f));
-	//bulletlife_sprite->SetSprite(lifeup_sprite);
-	//bulletlife_sprite->SetScale(0.2f);
+	bulletlife->SetSprite(bulletlife_sprite);
+	bulletlife->SetScale(0.1f);
+	//bulletlife->SetRotation(180);
+	bulletlife->SetAngle(180);
 	mGameWorld->AddObject(bulletlife);
 }
 
@@ -291,14 +299,14 @@ void Asteroids::CreateAlienship(const uint num_Alienship)
 	mEnemyCount = num_Alienship;
 	for (uint i = 0; i < num_Alienship; i++) {
 
-		//Animation *anim_ptr = AnimationManager::GetInstance().GetAnimationByName("alienship");
-		//shared_ptr<Sprite> alienship_sprite = make_shared<Sprite>(anim_ptr->GetWidth(), anim_ptr->GetHeight(), anim_ptr);
-		//alienship_sprite->SetLoopAnimation(true);
+		Animation *anim_ptr = AnimationManager::GetInstance().GetAnimationByName("alienship");
+		shared_ptr<Sprite> alienship_sprite = make_shared<Sprite>(anim_ptr->GetWidth(), anim_ptr->GetHeight(), anim_ptr);
+		alienship_sprite->SetLoopAnimation(true);
 
 		shared_ptr<GameObject> alienship = make_shared<Alienship>();
 		alienship->SetBoundingShape(make_shared<BoundingSphere>(alienship->GetThisPtr(), 4.0f));
-		//alienship->SetSprite(alienship_sprite);
-		//alienship->SetScale(0.2f);
+		alienship->SetSprite(alienship_sprite);
+		alienship->SetScale(0.2f);
 		mGameWorld->AddObject(alienship);
 	}
 }
